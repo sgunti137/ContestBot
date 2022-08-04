@@ -1,4 +1,5 @@
-import os
+import os, sys
+from venv import create
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
@@ -23,23 +24,54 @@ def createFolder(relativePath):
     if not os.path.isdir(path):
         os.makedirs(path)
 
-response = urlopen('https://codeforces.com/contest/1711')
-html = response.read()
+def createTestCases(relativePath, url):
+    response = urlopen(url)
+    html = response.read()
 
-soup = BeautifulSoup(html, 'html.parser')
-    
-title = getTitle(soup.find('title'))
-titleText = formatTitle(title)
+    soup = BeautifulSoup(html, 'html.parser')
+    data = soup.find_all('pre')
 
-data = []
-table = soup.find('table', attrs={'class':'problems'})
-rows = table.find_all('tr')
-for row in rows:
-    cols = row.find_all('td')
-    cols = [ele.text.strip() for ele in cols]
-    data.append([ele for ele in cols if ele])
+    ind = 0
+    for i in range(0, len(data), 2):
+        inpPath = relativePath + '\\inp' + str(ind) + '.txt'
+        with open(inpPath, 'w') as f:
+            f.write(data[i].text)
+        outPath = relativePath + '\\out' + str(ind) + '.txt'
+        with open(outPath, 'w') as f:
+            f.write(data[i + 1].text)
+        ind = ind + 1
 
-createFolder(titleText)
-for i in range(len(data) - 1):
-    name = chr(ord('A') + i)
-    createFolder(titleText + '\\' + name)
+    file = open("templates.cpp", "r")
+    solPath = relativePath + '\\sol.cpp'
+    with open(solPath, 'w') as f:
+        f.write(file.read())
+    file.close()
+
+class createDirectoryStructure:
+    URL = sys.argv[1]
+
+    response = urlopen(URL)
+    html = response.read()
+
+    soup = BeautifulSoup(html, 'html.parser')
+        
+    title = getTitle(soup.find('title'))
+    titleText = formatTitle(title)
+
+    data = []
+    table = soup.find('table', attrs = {'class': 'problems'})
+    rows = table.find_all('tr')
+
+    for row in rows:
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        data.append([ele for ele in cols if ele])
+
+    createFolder(titleText)
+    for i in range(len(data) - 1):
+        name = data[i + 1][0]
+        createFolder(titleText + '\\' + name)
+        createTestCases(titleText + '\\' + name, URL + '/problem/' + name)
+        print('Files created for Problem ' + name)
+
+createDirectoryStructure
