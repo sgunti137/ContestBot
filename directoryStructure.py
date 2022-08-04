@@ -67,11 +67,10 @@ class createDirectoryStructure:
         cols = [ele.text.strip() for ele in cols]
         data.append([ele for ele in cols if ele])
 
-    createFolder(titleText)
     for i in range(len(data) - 1):
         name = data[i + 1][0]
-        createFolder(titleText + '\\' + name)
-        createTestCases(titleText + '\\' + name, URL + '/problem/' + name)
+        createFolder(name)
+        createTestCases(name, URL + '/problem/' + name)
         print('Files created for Problem ' + name)
 
 createDirectoryStructure
