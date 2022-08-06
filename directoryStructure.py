@@ -35,10 +35,12 @@ def createTestCases(relativePath, url):
     for i in range(0, len(data), 2):
         inpPath = relativePath + '\\inp' + str(ind) + '.txt'
         with open(inpPath, 'w') as f:
-            f.write(data[i].text)
+            d = data[i].text.lstrip()
+            f.write(d)
         outPath = relativePath + '\\out' + str(ind) + '.txt'
         with open(outPath, 'w') as f:
-            f.write(data[i + 1].text)
+            d = data[i + 1].text.lstrip()
+            f.write(d)
         ind = ind + 1
 
     file = open("templates.cpp", "r")
@@ -48,7 +50,8 @@ def createTestCases(relativePath, url):
     file.close()
 
 class createDirectoryStructure:
-    URL = sys.argv[1]
+    contestId = sys.argv[1]
+    URL = 'https://codeforces.com/contest/' + contestId +'/'
 
     response = urlopen(URL)
     html = response.read()

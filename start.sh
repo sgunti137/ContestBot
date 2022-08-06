@@ -1,2 +1,2 @@
-echo 'Creating Files and Folders...'
+echo 'Creating Problem Folders...'
 py directoryStructure.py $1
