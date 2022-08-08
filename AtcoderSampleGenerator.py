@@ -3,22 +3,6 @@ from venv import create
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
-def getTitle(str):
-    for x in str:
-        return x
-
-def formatTitle(str):
-    st = 0
-    res = ""
-    for x in str:
-        if (st == 0 and x == '-'):
-            st = 1
-        elif (st == 1 and x == '-'):
-            st = 0
-        elif st == 1:
-            res += x
-    return res[1:-1]
-
 def createFolder(relativePath):
     path = os.getcwd() + '\\' + relativePath
     if not os.path.isdir(path):
@@ -27,20 +11,32 @@ def createFolder(relativePath):
 def createTestCases(relativePath, url):
     response = urlopen(url)
     html = response.read()
-
+    
     soup = BeautifulSoup(html, 'html.parser')
-    data = soup.find_all('pre')
+    data = soup.find_all('div', {'class': 'part'})
+    filter = []
+
+    for d in data:
+        for section in d.find_all('section'):
+            if section.text[0:7].lstrip()[0:7] == 'Sample':
+                filter.append(d)
+
+    data = filter
+
+    tests = []
+    for d in data:
+        da = d.find_all('pre')
+        for t in da:
+            tests.append(t.text.rstrip())
 
     ind = 0
-    for i in range(0, len(data), 2):
+    for i in range(0, len(tests), 2):
         inpPath = relativePath + '\\inp' + str(ind) + '.txt'
         with open(inpPath, 'w') as f:
-            d = data[i].text.lstrip()
-            f.write(d)
+            f.write(tests[i])
         outPath = relativePath + '\\out' + str(ind) + '.txt'
         with open(outPath, 'w') as f:
-            d = data[i + 1].text.lstrip()
-            f.write(d)
+            f.write(tests[i + 1])
         ind = ind + 1
 
     file = open("templates.cpp", "r")
@@ -51,29 +47,32 @@ def createTestCases(relativePath, url):
 
 class createDirectoryStructure:
     contestId = sys.argv[1]
-    URL = 'https://codeforces.com/contest/' + contestId +'/'
+    URL = 'https://atcoder.jp/contests/' + contestId +'/tasks'
 
     response = urlopen(URL)
     html = response.read()
 
     soup = BeautifulSoup(html, 'html.parser')
-        
-    title = getTitle(soup.find('title'))
-    titleText = formatTitle(title)
 
     data = []
-    table = soup.find('table', attrs = {'class': 'problems'})
+    table = soup.find('table', attrs = {'class': 'table table-bordered table-striped'})
     rows = table.find_all('tr')
 
     for row in rows:
         cols = row.find_all('td')
         cols = [ele.text.strip() for ele in cols]
-        data.append([ele for ele in cols if ele])
+        href = row.find_all('a')
+        if href == []:
+            continue
+        new_data = [ele for ele in cols if ele]
+        new_data.append(href[0]['href'])
+        data.append(new_data)
 
     for i in range(len(data) - 1):
-        name = data[i + 1][0]
+        name = data[i][0]
         createFolder(name)
-        createTestCases(name, URL + '/problem/' + name)
+        createTestCases(name, 'https://atcoder.jp' + data[i][4])
         print('Files created for Problem ' + name)
 
+print('Creating Problem Folders...')
 createDirectoryStructure
