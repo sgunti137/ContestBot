@@ -46,6 +46,7 @@ def createTestCases(relativePath, url):
     file.close()
 
 class createDirectoryStructure:
+    print('Creating Problem Folders...')
     contestId = sys.argv[1]
     URL = 'https://atcoder.jp/contests/' + contestId +'/tasks'
 
@@ -74,5 +75,4 @@ class createDirectoryStructure:
         createTestCases(name, 'https://atcoder.jp' + data[i][4])
         print('Files created for Problem ' + name)
 
-print('Creating Problem Folders...')
 createDirectoryStructure

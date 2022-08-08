@@ -34,6 +34,7 @@ def createTestCases(relativePath, url):
     file.close()
 
 class createDirectoryStructure:
+    print('Creating Problem Folders...')
     contestId = sys.argv[1]
     URL = 'https://codeforces.com/contest/' + contestId + '/'
 
@@ -57,5 +58,4 @@ class createDirectoryStructure:
         createTestCases(name, URL + '/problem/' + name)
         print('Files created for Problem ' + name)
 
-print('Creating Problem Folders...')
 createDirectoryStructure
