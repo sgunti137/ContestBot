@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 def createFolder(relativePath):
-    path = os.getcwd() + '\\' + relativePath
+    path = os.getcwd() + '/' + relativePath
     if not os.path.isdir(path):
         os.makedirs(path)
 
@@ -17,18 +17,18 @@ def createTestCases(relativePath, url):
 
     ind = 0
     for i in range(0, len(data), 2):
-        inpPath = relativePath + '\\inp' + str(ind) + '.txt'
+        inpPath = relativePath + '/inp' + str(ind) + '.txt'
         with open(inpPath, 'w') as f:
             d = data[i].text.lstrip()
             f.write(d)
-        outPath = relativePath + '\\out' + str(ind) + '.txt'
+        outPath = relativePath + '/out' + str(ind) + '.txt'
         with open(outPath, 'w') as f:
             d = data[i + 1].text.lstrip()
             f.write(d)
         ind = ind + 1
 
     file = open("templates.cpp", "r")
-    solPath = relativePath + '\\sol.cpp'
+    solPath = relativePath + '/sol.cpp'
     with open(solPath, 'w') as f:
         f.write(file.read())
     file.close()
