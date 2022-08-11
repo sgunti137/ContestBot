@@ -13,7 +13,7 @@ cd ContestBot
 # install the py packages required - Beautifulsoup
 ```
 
-# Usage
+# Creating Problem Folders
 ```bash
 ./start.sh cf <contest-id> # command to start Codeforces contest
 ./start.sh at <contest-id> # command to start Atcoder contest
@@ -21,7 +21,7 @@ cd ContestBot
 # For contest -> https://atcoder.jp/contests/abc264, the contest-id is 'abc264'
 ```
 
-# Running sol.cpp on multiple testcases and viewing output
+# Testing your solution
 ```bash
 ./test.sh A #if you want to test A/sol.cpp
 # this will run your code on downloaded test cases
