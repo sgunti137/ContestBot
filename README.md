@@ -16,7 +16,7 @@ cd ContestBot
 # Usage
 ```bash
 ./start.sh -cf <contest-id> # command to start Codeforces contest
-./start.sh -at <contest-id> # command to start Codeforces contest
+./start.sh -at <contest-id> # command to start Atcoder contest
 # For contest -> https://codeforces.com/contest/1713, the contest-id is '1713'
 # For contest -> https://atcoder.jp/contests/abc264, the contest-id is 'abc264'
 ```
